@@ -5,6 +5,7 @@ import { Layout } from './components/Layout/layout'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App() {
+  //this is the App.tsx file
 
   return (
     <BrowserRouter>
