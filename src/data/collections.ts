@@ -41,14 +41,14 @@ export const collections: Collection[] = [
         {
           id: '2-1',
           type: 'video',
-          url: '../../public/videos/pro-1.mp4',
+          url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
           title: 'Product Demo 1',
           createdAt: new Date('2024-02-01')
         },
         {
           id: '2-2',
           type: 'video',
-          url: '../../public/videos/prod-2.mp4',
+          url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
           title: 'Product Demo 2',
           createdAt: new Date('2024-02-02')
         }
@@ -110,14 +110,14 @@ export const collections: Collection[] = [
         {
           id: '5-1',
           type: 'video',
-          url: '../../public/videos/train-1.mp4',
+          url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
           title: 'Module 1',
           createdAt: new Date('2024-01-25')
         },
         {
           id: '5-2',
           type: 'video',
-          url: '../../public/videos/train-2.mp4',
+          url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
           title: 'Module 2',
           createdAt: new Date('2024-01-26')
         }
@@ -179,14 +179,14 @@ export const collections: Collection[] = [
         {
           id: '8-1',
           type: 'video',
-          url: '../../public/videos/tut-1.mp4',
+          url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
           title: 'Getting Started',
           createdAt: new Date('2024-02-20')
         },
         {
           id: '8-2',
           type: 'video',
-          url: '../../public/videos/tut-2.mp4',
+          url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
           title: 'Advanced Features',
           createdAt: new Date('2024-02-21')
         }
