@@ -1,6 +1,6 @@
 import './App.css'
 import { CollectionView } from './collections/CollectionView'
-import { Collections } from './components/Collections/collections'
+import { Collections } from './components/Collections/Collections'
 import { Layout } from './components/Layout/layout'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
