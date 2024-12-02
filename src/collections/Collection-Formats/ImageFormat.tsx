@@ -1,4 +1,3 @@
-import React from "react";
 
 const ImageFormat = ({ src, title }: { src: string; title: string }) => {
   return (
