@@ -11,6 +11,8 @@ import {
   Info,
   ChevronsUpDown,
   ListFilter,
+  ArrowLeft,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContentDialog } from "@/components/ContentDialog";
@@ -18,10 +20,11 @@ import { Collection, CollectionItem } from "@/types/collection";
 import ImageFormat from "./Collection-Formats/ImageFormat";
 import VideoFormat from "./Collection-Formats/VideoFormat";
 import FileFormat from "./Collection-Formats/FileFormat";
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/redux/Store/store'
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/Store/store";
 import { updateCollection } from "@/redux/Slices/collectionsSlice";
 import { AddContentDialog } from "@/components/AddContentDialog/AddContentDialog";
+import { useNavigate } from "react-router-dom";
 
 //Collection View file shows the collection items in a grid layout. It shows all the content available in the particular collection.
 //It also has a filter button to sort the collection items in ascending or descending order.
@@ -29,14 +32,19 @@ import { AddContentDialog } from "@/components/AddContentDialog/AddContentDialog
 // It fetches the collection id from the params.
 
 export function CollectionView() {
-  const collections = useSelector((state: RootState) => state.collections) as { id: string; title: string; type: string[]; items: CollectionItem[] }[]
-  const { id } = useParams()
-  const collection = collections.find((c) => c.id === id)
+  const collections = useSelector((state: RootState) => state.collections) as {
+    id: string;
+    title: string;
+    type: string[];
+    items: CollectionItem[];
+  }[];
+  const { id } = useParams();
+  const collection = collections.find((c) => c.id === id);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc"); //Sort order state
   const [selectedItem, setSelectedItem] = useState<CollectionItem | null>(null); //Selected item state
   const [dialogOpen, setDialogOpen] = useState(false); //Dialog open state
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   if (!collection) return <div>Collection not found</div>;
 
   // Function to handle item click
@@ -44,7 +52,7 @@ export function CollectionView() {
     setSelectedItem(item);
     setDialogOpen(true);
   };
-  
+
   const handleAddContent = (newContent: {
     url: string;
     title: string;
@@ -54,15 +62,18 @@ export function CollectionView() {
     if (collection) {
       const updatedCollection = {
         ...collection,
-        items: [...collection.items, {
-          id: `${collection.id}-${collection.items.length + 1}`,
-          ...newContent
-        }],
-        itemCount: collection.items.length + 1
+        items: [
+          ...collection.items,
+          {
+            id: `${collection.id}-${collection.items.length + 1}`,
+            ...newContent,
+          },
+        ],
+        itemCount: collection.items.length + 1,
       };
       dispatch(updateCollection(updatedCollection as Collection));
     }
-  }
+  };
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -89,24 +100,47 @@ export function CollectionView() {
     setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
   };
 
+
+  const handleDeleteContent = (itemId: string) => {
+    if (collection) {
+      const updatedItems = collection.items.filter(item => item.id !== itemId);
+      const updatedCollection = {
+        ...collection,
+        items: updatedItems,
+        itemCount: updatedItems.length
+      };
+      dispatch(updateCollection(updatedCollection as Collection));
+    }
+  };
+
   return (
     <>
       <div className="min-h-screen bg-sidebar dark:bg-zinc-800 p-3 sm:p-4 md:p-2 font-poppins">
         <div className="mx-auto max-w-[1400px] rounded-xl bg-background p-4 sm:p-5 md:p-6">
           <div className="flex justify-between items-center mb-6">
-            <div>
-              <h1 className="text-2xl font-semibold mb-2">
-                {collection.title}
-              </h1>
-              <p className="text-slate-600">
-                {collection.items.length} {collection.type[0]}
-                {collection.items.length !== 1 ? "s" : ""}
-              </p>
+            <div className="flex items-center gap-4">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => navigate(-1)}
+                className="rounded-full hover:bg-slate-100"
+              >
+                <ArrowLeft className="h-6 w-6" />
+              </Button>
+              <div>
+                <h1 className="text-2xl font-semibold">
+                  {collection.title}
+                </h1>
+                <p className="text-slate-600">
+                  {collection.items.length} {collection.type[0]}
+                  {collection.items.length !== 1 ? "s" : ""}
+                </p>
+              </div>
             </div>
 
             {/** Filter button */}
             <div className="flex items-center gap-3">
-            <AddContentDialog
+              <AddContentDialog
                 collectionType={collection.type[0]}
                 onAddContent={handleAddContent}
               />
@@ -150,6 +184,17 @@ export function CollectionView() {
                     <VideoFormat src={item.url || ""} />
                   )}
                   {item.type === "document" && <FileFormat />}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteContent(item.id);
+                    }}
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 hover:bg-red-500/60"
+                  >
+                    <Trash2 className="h-4 w-4 text-white" />
+                  </Button>
                 </div>
 
                 <div className="p-4">

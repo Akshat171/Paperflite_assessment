@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import collectionsReducer from '../Slices/collectionsSlice'
 
+// Create the store
 export const store = configureStore({
-  reducer: {
+    reducer: {
+      // Add your reducers here
     collections: collectionsReducer
   }
 })

@@ -6,10 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '@/redux/Store/store'
-import { addCollection, updateCollection } from '@/redux/Slices/collectionsSlice'
-
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/redux/Store/store";
+import {
+  addCollection,
+  updateCollection,
+} from "@/redux/Slices/collectionsSlice";
 
 import {
   Search,
@@ -25,8 +27,7 @@ import {
 import Loader from "../../../public/images/Icons.png";
 import Text from "../../../public/images/text.png";
 import { ThemeToggle } from "../ThemeToggle";
-import { NewCollectionDialog } from "../New-Collection-Dialog/NewCollectionDialog"
-
+import { NewCollectionDialog } from "../New-Collection-Dialog/NewCollectionDialog";
 
 const filterTypes: { label: string; value: ContentType | "all" }[] = [
   { label: "All Files", value: "all" },
@@ -36,11 +37,9 @@ const filterTypes: { label: string; value: ContentType | "all" }[] = [
 ];
 
 export function Collections() {
-  const collections = useSelector((state: RootState) => state.collections)
-  const dispatch = useDispatch()
+  const collections = useSelector((state: RootState) => state.collections);
+  const dispatch = useDispatch();
 
-  // const [collections, setCollections] =
-  //   useState<Collection[]>(initialCollections);
   const [activeFilter, setActiveFilter] = useState<ContentType | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -65,49 +64,52 @@ export function Collections() {
     const collection = collections.find((c) => c.id === id);
     setEditingTitle(collection?.title || "");
   };
-  
+
   const handleSave = () => {
     if (editingCollectionId) {
       const collection = collections.find((c) => c.id === editingCollectionId);
       if (collection) {
-        dispatch(updateCollection({
-          ...collection,
-          title: editingTitle
-        }));
+        dispatch(
+          updateCollection({
+            ...collection,
+            title: editingTitle,
+          })
+        );
       }
     }
-    
+
     setIsEditing(false);
     setEditingCollectionId(null);
-  
+
     toast({
       title: "Changes saved successfully",
       description: "Your collection has been updated",
       className: "bg-green-50 border-green-200",
     });
-  };  
+  };
   const handleCancel = () => {
     setIsEditing(false);
     setEditingCollectionId(null);
-  
+
     toast({
       title: "Changes discarded",
       description: "Your changes have been cancelled",
       className: "bg-slate-50 border-slate-200",
     });
   };
-  
+
   const handleRename = (id: string, newTitle: string) => {
     const collection = collections.find((c) => c.id === id);
-    
+
     if (collection) {
-      dispatch(updateCollection({
-        ...collection,
-        title: newTitle
-      }));
+      dispatch(
+        updateCollection({
+          ...collection,
+          title: newTitle,
+        })
+      );
     }
   };
-
 
   const handleCreateCollection = (data: {
     title: string;
@@ -118,26 +120,27 @@ export function Collections() {
       id: (collections.length + 1).toString(),
       title: data.title,
       thumbnail: data.thumbnail,
-      type: ['photo'] as ContentType[],
+      type: ["photo"] as ContentType[],
       itemCount: data.itemCount,
-      items: Array(data.itemCount).fill(null).map((_, index) => ({
-        id: `${collections.length + 1}-${index + 1}`,
-        type: 'photo' as ContentType,
-        url: 'https://images.unsplash.com/photo-1464059728276-d877187d61a9',
-        title: `Item ${index + 1}`,
-        createdAt: new Date()
-      }))
-    }
+      items: Array(data.itemCount)
+        .fill(null)
+        .map((_, index) => ({
+          id: `${collections.length + 1}-${index + 1}`,
+          type: "photo" as ContentType,
+          url: "https://images.unsplash.com/photo-1464059728276-d877187d61a9",
+          title: `Item ${index + 1}`,
+          createdAt: new Date(),
+        })),
+    };
 
-    dispatch(addCollection(newCollection))
-  
+    dispatch(addCollection(newCollection));
+
     toast({
       title: "Collection created",
       description: "Your new collection has been created successfully",
       className: "bg-green-50 border-green-200",
-    })
-  }
-
+    });
+  };
 
   return (
     <div className="min-h-screen bg-sidebar dark:bg-zinc-800 p-3 sm:p-4 md:p-2 font-poppins">
@@ -228,11 +231,10 @@ export function Collections() {
                     <span className="font-mono text-xs text-gray-400 dark:text-slate-50">
                       <Copy />
                     </span>
-                    </Button>
-                    <NewCollectionDialog onCreateCollection={handleCreateCollection} />
-
-
-                  
+                  </Button>
+                  <NewCollectionDialog
+                    onCreateCollection={handleCreateCollection}
+                  />
                 </div>
               </div>
             )}
